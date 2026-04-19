@@ -3,7 +3,7 @@ from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-DATABASE_URL = ""
+DATABASE_URL = "postgresql://postgres:karim@localhost:5432/postgres"
 
 engine = create_engine(DATABASE_URL)
 

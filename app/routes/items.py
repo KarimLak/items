@@ -11,17 +11,17 @@ def read_items(service : ItemService = Depends(get_item_service), db=Depends(get
     return service.get_all_items(db)
 
 @router.get("/items/{item_id}", response_model = ItemResponse)
-def read_items(item_id: int, service : ItemService = Depends(get_item_service)):
-    return service.get_item(item_id)
+def read_items(item_id: int, service : ItemService = Depends(get_item_service), db=Depends(get_db)):
+    return service.get_item(item_id, db)
 
 @router.post("/items", response_model = ItemResponse)
-def create_item(payload: ItemCreate, service : ItemService = Depends(get_item_service)):
-    return service.new_item(payload)
+def create_item(payload: ItemCreate, service : ItemService = Depends(get_item_service), db=Depends(get_db)):
+    return service.new_item(payload, db)
     
 @router.patch("/items/{item_id}", response_model=ItemResponse)
-def update_item(item_id: int, payload: ItemUpdate, service : ItemService = Depends(get_item_service)):
-    return service.modify_item(item_id, payload)
+def update_item(item_id: int, payload: ItemUpdate, service : ItemService = Depends(get_item_service), db=Depends(get_db)):
+    return service.modify_item(item_id, payload, db)
 
 @router.delete("/items/{item_id}", response_model = ItemResponse)
-def delete_item(item_id: int, service : ItemService = Depends(get_item_service)):
-    return service.remove_item(item_id)
+def delete_item(item_id: int, service : ItemService = Depends(get_item_service), db=Depends(get_db)):
+    return service.remove_item(item_id, db)
