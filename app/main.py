@@ -1,12 +1,23 @@
-from typing import List
-from fastapi import Depends, FastAPI, HTTPException
-from app.schemas.items import ItemCreate, ItemResponse, ItemUpdate
-from app.service.item import ItemService, get_item_service
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.database import engine
+from app.models.items import Base
 from app.routes.items import router
-app = FastAPI()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+    yield
+
+app = FastAPI(lifespan=lifespan)  # ← only ONE app, created once
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router)
-    
-
-
-
